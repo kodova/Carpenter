@@ -1,0 +1,6 @@
+language: java
+services:
+	- mysql -e "src/test/resources/carpenter_sample.sql"
+jdk:
+	- oraclejdk7
+	- openjdk6
