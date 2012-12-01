@@ -5,4 +5,5 @@ jdk:
     - oraclejdk7
     - openjdk6
 before_script:
-    - mysql -e "src/test/resources/carpenter_sample.sql"
+    - mysql -e "create database carpenter_sample"
+    - mysql < src/test/resources/carpenter_sample.sql
