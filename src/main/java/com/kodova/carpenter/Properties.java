@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * @Sebastian G - Ha I stole your code
  */
 public class Properties {
 
