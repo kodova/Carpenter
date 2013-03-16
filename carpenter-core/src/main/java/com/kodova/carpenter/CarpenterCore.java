@@ -30,6 +30,7 @@ public class CarpenterCore {
 			throw new FixtureNotFound(entityClass, name);
 		}
 
+
 		E entity = fixture.newInstance();
 		fixture.configure(entity);
 		constructionContext.endBuild();
@@ -38,11 +39,7 @@ public class CarpenterCore {
 
 	public <E> E build(Class<E> entityClass, String name, Properties properties){
 		E entity = build(entityClass, name);
-		try {
-			overrides(entity, properties);
-		} catch (IntrospectionException e) {
-			throw new RuntimeException(e);
-		}
+		overrides(entity, properties);
 		return entity;
 	}
 
@@ -73,24 +70,6 @@ public class CarpenterCore {
 		fixtureTable.put(entityType, name, fixture);
 	}
 
-	private void overrides(Object entity, Properties properties) throws IntrospectionException {
-		for (Map.Entry<String, Object> entry : properties.getOverrides().entrySet()){
-			override(entity, entry.getKey(), entry.getValue());
-		}
-	}
-
-	private void override(Object entity, String property, Object value) throws IntrospectionException {
-		try {
-			PropertyDescriptor propertyDescriptor = new PropertyDescriptor(property, entity.getClass());
-			Invokable setter = Invokable.from(propertyDescriptor.getWriteMethod());
-			setter.invoke(entity, value);
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void setPersister(Persister persister) {
 		this.persister = Optional.of(persister);
 	}
@@ -107,6 +86,27 @@ public class CarpenterCore {
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void overrides(Object entity, Properties properties) {
+		for (Map.Entry<String, Object> entry : properties.getOverrides().entrySet()){
+			override(entity, entry.getKey(), entry.getValue());
+		}
+	}
+
+	private void override(Object entity, String property, Object value) {
+		PropertyDescriptor propertyDescriptor = null;
+		try {
+			propertyDescriptor = new PropertyDescriptor(property, entity.getClass());
+			Invokable setter = Invokable.from(propertyDescriptor.getWriteMethod());
+			setter.invoke(entity, value);
+		} catch (InvocationTargetException e) {
+			throw new OverrideException(propertyDescriptor, e);
+		} catch (IllegalAccessException e) {
+			throw new OverrideException(propertyDescriptor, e);
+		} catch (IntrospectionException e) {
+			throw new OverrideException("Failed to get instance of property " + property, e);
 		}
 	}
 

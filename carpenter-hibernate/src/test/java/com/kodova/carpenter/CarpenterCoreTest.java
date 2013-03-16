@@ -96,6 +96,17 @@ public class CarpenterCoreTest {
 		assertEquals(override, user.getFirstName());
 	}
 
+	@Test(expected = OverrideException.class)
+	public void shouldNotBuildEntityDueToInvalidPropertyName() throws Exception {
+		carpenterCore.addFixture(new Fixture<User>(){
+			public void configure(User entity) {
+				entity.setFirstName("Foo");
+			}
+		});
+
+		User user = carpenterCore.build(User.class, User.class.getName(), new Properties().set("invalid", "foo"));
+	}
+
 	@Test
 	public void shouldCreateEntity() throws Exception {
 		carpenterCore.addFixture(new UserFixture());

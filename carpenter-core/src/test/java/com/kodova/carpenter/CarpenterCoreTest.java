@@ -121,4 +121,5 @@ public class CarpenterCoreTest {
 		assertSame(user, userCaptor.getValue());
 		assertEquals(override, user.getFirstName());
 	}
+
 }
