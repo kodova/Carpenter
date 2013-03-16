@@ -37,7 +37,15 @@ public abstract class Fixture<E> {
 	}
 
 	public String getName(){
-		return (name.isPresent()) ? name.get() : getType().getName();
+		if(name.isPresent()){
+			return name.get();
+		}
+
+		if(this.getClass().isAnnotationPresent(Name.class)){
+			return this.getClass().getAnnotation(Name.class).value();
+		}
+
+		return getType().getName();
 	}
 
 	public void setContext(ConstructionContext context) {
