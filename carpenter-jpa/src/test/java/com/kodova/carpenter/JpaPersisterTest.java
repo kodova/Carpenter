@@ -2,18 +2,15 @@ package com.kodova.carpenter;
 
 import com.kodova.carpenter.example.entity.Post;
 import com.kodova.carpenter.example.entity.User;
+import com.kodova.carpenter.suite.DatabaseSuite;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
 
 import static com.kodova.carpenter.Carpenter.props;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class JpaPersisterTest {
 
@@ -21,7 +18,7 @@ public class JpaPersisterTest {
 
 	@Before
 	public void setUp() throws Exception {
-		em = Persistence.createEntityManagerFactory("CarpenterUnit").createEntityManager();
+		em = DatabaseSuite.getEntityManager();
 		em.getTransaction().begin();
 		Carpenter.fixturePackage("com.kodova.carpenter.fixture");
 		Carpenter.persister(new JpaPersister(em));
@@ -45,7 +42,6 @@ public class JpaPersisterTest {
 	}
 
 	@Test
-	@Ignore
 	public void shouldPersistNested() throws Exception {
 		Post post = Carpenter.create(Post.class);
 		assertTrue(post.getId() > 0);
