@@ -1,8 +1,12 @@
 package com.kodova.carpenter;
 
+import com.kodova.carpenter.core.CarpenterCore;
+import com.kodova.carpenter.core.OverrideException;
 import com.kodova.carpenter.entity.FixturelessEntity;
 import com.kodova.carpenter.entity.User;
 import com.kodova.carpenter.entity.UserFixture;
+import com.kodova.carpenter.fixture.Fixture;
+import com.kodova.carpenter.fixture.FixtureNotFound;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CarpenterCoreTest {

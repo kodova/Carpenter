@@ -1,6 +1,5 @@
 package com.kodova.carpenter.fixture;
 
-import com.kodova.carpenter.Fixture;
 import com.kodova.carpenter.example.entity.User;
 
 public class UserFixture extends Fixture<User>{

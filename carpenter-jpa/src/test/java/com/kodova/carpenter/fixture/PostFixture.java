@@ -1,6 +1,5 @@
 package com.kodova.carpenter.fixture;
 
-import com.kodova.carpenter.Fixture;
 import com.kodova.carpenter.example.entity.Post;
 import com.kodova.carpenter.example.entity.User;
 

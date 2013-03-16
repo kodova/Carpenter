@@ -1,6 +1,7 @@
 package com.kodova.carpenter.entity;
 
-import com.kodova.carpenter.Fixture;
+
+import com.kodova.carpenter.fixture.Fixture;
 
 /**
  *

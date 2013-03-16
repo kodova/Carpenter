@@ -1,14 +1,16 @@
-package com.kodova.carpenter;
+package com.kodova.carpenter.fixture;
 
 import com.google.common.base.Optional;
 import com.google.common.reflect.TypeToken;
+import com.kodova.carpenter.core.ConstructionContext;
+import com.kodova.carpenter.Properties;
 
 /**
  *
  */
 public abstract class Fixture<E> {
 
-	private TypeToken<E> typeToken = new TypeToken<E>(getClass()) {};
+	private final TypeToken<E> typeToken = new TypeToken<E>(getClass()) {};
 	private Optional<String> name = Optional.absent();
 	private ConstructionContext context;
 

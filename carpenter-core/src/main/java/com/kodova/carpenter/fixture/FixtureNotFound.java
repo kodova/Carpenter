@@ -1,4 +1,4 @@
-package com.kodova.carpenter;
+package com.kodova.carpenter.fixture;
 
 /**
  *

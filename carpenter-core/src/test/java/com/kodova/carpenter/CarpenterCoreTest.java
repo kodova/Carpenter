@@ -1,8 +1,12 @@
 package com.kodova.carpenter;
 
+import com.kodova.carpenter.core.CarpenterCore;
+import com.kodova.carpenter.core.OverrideException;
 import com.kodova.carpenter.entity.FixturelessEntity;
 import com.kodova.carpenter.entity.User;
 import com.kodova.carpenter.entity.UserFixture;
+import com.kodova.carpenter.fixture.Fixture;
+import com.kodova.carpenter.fixture.FixtureNotFound;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CarpenterCoreTest {
@@ -94,6 +98,26 @@ public class CarpenterCoreTest {
 		String override = "Bar";
 		User user = carpenterCore.build(User.class, User.class.getName(), new Properties().set("firstName", override));
 		assertEquals(override, user.getFirstName());
+	}
+
+	@Test(expected = OverrideException.class)
+	public void shouldNotBuildEntityWithOverridDueToInvalidPropertyName() throws Exception {
+		carpenterCore.addFixture(new Fixture<User>(){
+			public void configure(User entity) {
+				entity.setFirstName("Foo");
+			}
+		});
+		carpenterCore.build(User.class, User.class.getName(), new Properties().set("invalid", "foo"));
+	}
+
+	@Test(expected = OverrideException.class)
+	public void shouldNotBuildEntityWithOverridDueToInvalidPropertyType() throws Exception {
+		carpenterCore.addFixture(new Fixture<User>(){
+			public void configure(User entity) {
+				entity.setFirstName("Foo");
+			}
+		});
+		carpenterCore.build(User.class, User.class.getName(), new Properties().set("firstName", 7));
 	}
 
 	@Test

@@ -1,9 +1,13 @@
-package com.kodova.carpenter;
+package com.kodova.carpenter.core;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.common.reflect.Invokable;
+import com.kodova.carpenter.Persister;
+import com.kodova.carpenter.Properties;
+import com.kodova.carpenter.fixture.Fixture;
+import com.kodova.carpenter.fixture.FixtureNotFound;
 import org.reflections.Reflections;
 
 import java.beans.IntrospectionException;
@@ -16,8 +20,8 @@ import java.util.Set;
 public class CarpenterCore {
 
 	private Optional<Persister> persister;
-	private Table<Class<?>, String, Fixture<?>> fixtureTable = HashBasedTable.create();
-	private ConstructionContext constructionContext = new ConstructionContext();
+	private final Table<Class<?>, String, Fixture<?>> fixtureTable = HashBasedTable.create();
+	private final ConstructionContext constructionContext = new ConstructionContext();
 
 	public CarpenterCore(){
 		this.persister = Optional.absent();
@@ -101,6 +105,8 @@ public class CarpenterCore {
 			propertyDescriptor = new PropertyDescriptor(property, entity.getClass());
 			Invokable setter = Invokable.from(propertyDescriptor.getWriteMethod());
 			setter.invoke(entity, value);
+		} catch (IllegalArgumentException e) {
+			throw new OverrideException(propertyDescriptor, e);
 		} catch (InvocationTargetException e) {
 			throw new OverrideException(propertyDescriptor, e);
 		} catch (IllegalAccessException e) {

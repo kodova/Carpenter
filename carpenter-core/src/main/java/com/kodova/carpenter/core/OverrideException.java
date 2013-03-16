@@ -1,4 +1,4 @@
-package com.kodova.carpenter;
+package com.kodova.carpenter.core;
 
 import java.beans.PropertyDescriptor;
 

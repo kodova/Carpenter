@@ -1,6 +1,9 @@
 package com.kodova.carpenter;
 
 
+import com.kodova.carpenter.core.CarpenterCore;
+import com.kodova.carpenter.fixture.Fixture;
+
 public class Carpenter {
 
 	private  static final CarpenterCore CARPENTER_CORE = new CarpenterCore();
@@ -51,5 +54,9 @@ public class Carpenter {
 
 	public static void fixturePackage(String toScan){
 		CARPENTER_CORE.scanPackageForFixtures(toScan);
+	}
+
+	public static void addFixture(Fixture<?> fixture) {
+		CARPENTER_CORE.addFixture(fixture);
 	}
 }

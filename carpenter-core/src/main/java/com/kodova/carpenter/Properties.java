@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class Properties {
 
-	Map<String, Object> overrides = new HashMap<String, Object>();
+	private final Map<String, Object> overrides = new HashMap<String, Object>();
 
 
 	public Properties set(String key, Object value){

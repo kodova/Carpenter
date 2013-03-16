@@ -1,9 +1,12 @@
-package com.kodova.carpenter;
+package com.kodova.carpenter.core;
+
+import com.kodova.carpenter.Carpenter;
+import com.kodova.carpenter.Properties;
 
 public class ConstructionContext {
 
-	int buildCount = 0;
-	int createCount = 0;
+	private int buildCount = 0;
+	private int createCount = 0;
 
 	public ConstructionContext() {
 	}
