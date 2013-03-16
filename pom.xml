@@ -15,6 +15,20 @@
 		<module>carpenter-hibernate</module>
 	</modules>
 
+	<developers>
+		<developer>
+			<name>Patrick Arnold</name>
+			<email>patrick@kodova.com</email>
+			<organization>Kodova</organization>
+			<organizationUrl>http://kodova.com</organizationUrl>
+			<roles>
+				<role>owner</role>
+				<role>developer</role>
+			</roles>
+			<timezone></timezone>
+		</developer>
+	</developers>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.google.guava</groupId>
