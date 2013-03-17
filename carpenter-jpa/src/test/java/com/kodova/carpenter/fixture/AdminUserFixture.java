@@ -7,6 +7,8 @@ public class AdminUserFixture extends Fixture<User>{
 
 	@Override
 	public void configure(User entity) {
-		//TODO need to implement
+		composite(entity, User.class);
+		entity.setAdmin(true);
 	}
+
 }

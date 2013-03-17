@@ -2,6 +2,7 @@ package com.kodova.carpenter.fixture;
 
 import com.google.common.base.Optional;
 import com.google.common.reflect.TypeToken;
+import com.kodova.carpenter.core.CarpenterCore;
 import com.kodova.carpenter.core.ConstructionContext;
 import com.kodova.carpenter.Properties;
 
@@ -13,6 +14,7 @@ public abstract class Fixture<E> {
 	private final TypeToken<E> typeToken = new TypeToken<E>(getClass()) {};
 	private Optional<String> name = Optional.absent();
 	private ConstructionContext context;
+	private CarpenterCore carpenterCore;
 
 
 	abstract public void configure(E entity);
@@ -58,5 +60,21 @@ public abstract class Fixture<E> {
 
 	protected <T> T get(Class<T> type, Properties properties) {
 		return context.get(type, properties);
+	}
+
+	protected <T extends E> void composite(E entity, Class<T> type) {
+		composite(entity, type, type.getName());
+	}
+
+	protected <T extends E> void composite(E entity, Class<T> type, String name){
+		Fixture<T> fixture = carpenterCore.getFixture(type, name);
+		if(fixture.equals(this)){
+			throw new RuntimeException("Can create composit from same fixture");
+		}
+		fixture.configure((T) entity);
+	}
+
+	public void setCarpenterCore(CarpenterCore carpenterCore) {
+		this.carpenterCore = carpenterCore;
 	}
 }

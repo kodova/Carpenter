@@ -49,4 +49,11 @@ public class JpaPersisterTest {
 		assertTrue(post.getUser().getId() > 0);
 	}
 
+	@Test
+	public void shouldPersistByNameAdminUser() throws Exception {
+		User user = Carpenter.create(User.class, "admin");
+		assertTrue(user.isAdmin());
+		assertTrue("The entity manager does not contain the persisted user", em.contains(user));
+	}
+
 }

@@ -29,16 +29,28 @@ public class CarpenterCore {
 
 	public <E> E build(Class<E> entityClass, String name){
 		constructionContext.startBuild();
-		Fixture<E> fixture = (Fixture<E>) fixtureTable.get(entityClass, name);
-		if(fixture == null){
-			throw new FixtureNotFound(entityClass, name);
-		}
-
-
+		Fixture<E> fixture = getFixture(entityClass, name);
 		E entity = fixture.newInstance();
 		fixture.configure(entity);
 		constructionContext.endBuild();
 		return entity;
+	}
+
+	public  <E> Fixture<E> getFixture(Class<E> entityClass, String name) {
+		Fixture<E> fixture = (Fixture<E>) fixtureTable.get(entityClass, name);
+		if(fixture == null){
+			throw new FixtureNotFound(entityClass, name);
+		}
+		return fixture;
+	}
+
+	public <E> Fixture<E> getFixture(Class<E> entityClass) {
+		String name = entityClass.getName();
+		Fixture<E> fixture = (Fixture<E>) fixtureTable.get(entityClass, name);
+		if(fixture == null){
+			throw new FixtureNotFound(entityClass, name);
+		}
+		return fixture;
 	}
 
 	public <E> E build(Class<E> entityClass, String name, Properties properties){
@@ -71,6 +83,7 @@ public class CarpenterCore {
 		String name = fixture.getName();
 		Class<?> entityType = fixture.getType();
 		fixture.setContext(constructionContext);
+		fixture.setCarpenterCore(this);
 		fixtureTable.put(entityType, name, fixture);
 	}
 
@@ -115,6 +128,4 @@ public class CarpenterCore {
 			throw new OverrideException("Failed to get instance of property " + property, e);
 		}
 	}
-
-
 }
