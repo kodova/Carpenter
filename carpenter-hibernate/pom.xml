@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.kodova.carpenter</groupId>
 		<artifactId>carpenter</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>0.8.0</version>
 		<relativePath>../</relativePath>
 	</parent>
 
@@ -18,6 +18,12 @@
 			<groupId>com.kodova.carpenter</groupId>
 			<artifactId>carpenter-core</artifactId>
 			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.1.9.Final</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

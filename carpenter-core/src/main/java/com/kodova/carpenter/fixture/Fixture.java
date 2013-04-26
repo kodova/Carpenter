@@ -2,9 +2,11 @@ package com.kodova.carpenter.fixture;
 
 import com.google.common.base.Optional;
 import com.google.common.reflect.TypeToken;
+import com.kodova.carpenter.Properties;
 import com.kodova.carpenter.core.CarpenterCore;
 import com.kodova.carpenter.core.ConstructionContext;
-import com.kodova.carpenter.Properties;
+
+import java.util.Collection;
 
 /**
  *
@@ -16,6 +18,7 @@ public abstract class Fixture<E> {
 	private ConstructionContext context;
 	private CarpenterCore carpenterCore;
 
+	public Fixture(){}
 
 	abstract public void configure(E entity);
 
@@ -117,8 +120,38 @@ public abstract class Fixture<E> {
 	protected <T extends E> void composite(E entity, Class<T> type, String name){
 		Fixture<T> fixture = carpenterCore.getFixture(type, name);
 		if(fixture.equals(this)){
-			throw new RuntimeException("Can create composit from same fixture");
+			throw new RuntimeException("Can create composite from same fixture");
 		}
 		fixture.configure((T) entity);
+	}
+
+	/**
+	 * Picks a random value from a enum
+	 * @param enumType
+	 * @param <T>
+	 * @return
+	 */
+	public static <T extends Enum> T pick(Class<T> enumType){
+		return Randoms.pick(enumType);
+	}
+
+	/**
+	 * Picks a random value from a collection
+	 * @param items
+	 * @param <T>
+	 * @return
+	 */
+	public static <T> T pick(Collection<T> items){
+		return Randoms.pick(items);
+	}
+
+	/**
+	 * Picks a random value from array or a list of arguments
+	 * @param items
+	 * @param <T>
+	 * @return
+	 */
+	public static <T> T pick(T... items){
+		return Randoms.pick(items);
 	}
 }

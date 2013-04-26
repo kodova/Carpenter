@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +42,7 @@ public class Post extends BaseEntity{
 	private User user;
 
 	@OneToMany(mappedBy = "post")
-	private List<Comment> comments = Collections.emptyList();
+	private List<Comment> comments = new ArrayList<Comment>();
 
 	public int getId() {
 		return id;

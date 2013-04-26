@@ -1,7 +1,15 @@
-package com.kodova.carpenter.entity;
+package com.kodova.carpenter.example.entity;
 
-import javax.persistence.*;
-import java.util.Collections;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +42,7 @@ public class Post extends BaseEntity{
 	private User user;
 
 	@OneToMany(mappedBy = "post")
-	private List<Comment> comments = Collections.emptyList();
+	private List<Comment> comments = new ArrayList<Comment>();
 
 	public int getId() {
 		return id;

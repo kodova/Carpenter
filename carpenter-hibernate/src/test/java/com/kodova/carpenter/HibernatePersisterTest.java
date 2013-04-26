@@ -3,28 +3,27 @@ package com.kodova.carpenter;
 import com.kodova.carpenter.example.entity.Post;
 import com.kodova.carpenter.example.entity.User;
 import com.kodova.carpenter.suite.DatabaseSuite;
+import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.persistence.EntityManager;
-
 import static com.kodova.carpenter.Carpenter.props;
 import static org.junit.Assert.*;
 
-public class JpaPersisterTest {
+public class HibernatePersisterTest {
 
-	private EntityManager em;
+	private Session session;
 
 	@Before
 	public void setUp() throws Exception {
-		em = DatabaseSuite.getEntityManager();
-		em.getTransaction().begin();
+		session = DatabaseSuite.getSession();
+		session.getTransaction().begin();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		em.getTransaction().rollback();
+		session.getTransaction().rollback();
 	}
 
 	@Test
@@ -51,7 +50,7 @@ public class JpaPersisterTest {
 	public void shouldPersistByNameAdminUser() throws Exception {
 		User user = Carpenter.create(User.class, "admin");
 		assertTrue(user.isAdmin());
-		assertTrue("The entity manager does not contain the persisted user", em.contains(user));
+		assertTrue("The entity manager does not contain the persisted user", session.contains(user));
 	}
 
 	@Test

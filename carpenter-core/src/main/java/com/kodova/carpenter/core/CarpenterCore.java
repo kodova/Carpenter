@@ -8,11 +8,13 @@ import com.kodova.carpenter.Persister;
 import com.kodova.carpenter.Properties;
 import com.kodova.carpenter.fixture.Fixture;
 import com.kodova.carpenter.fixture.FixtureNotFound;
+import com.kodova.carpenter.fixture.PartialFixture;
 import org.reflections.Reflections;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,12 +30,19 @@ public class CarpenterCore {
 	}
 
 	public <E> E build(Class<E> entityClass, String name){
-		constructionContext.startBuild();
-		Fixture<E> fixture = getFixture(entityClass, name);
-		E entity = fixture.newInstance();
-		fixture.configure(entity);
-		constructionContext.endBuild();
-		return entity;
+		return buildEntity(entityClass, name, new Properties());
+	}
+
+	public <E> E build(Class<E> entityClass, String name, Properties properties){
+		return buildEntity(entityClass, name, properties);
+	}
+
+	public <E> E create(Class<E> entityClass, String name){
+		return createEntity(entityClass, name, new Properties());
+	}
+
+	public <E> E create(Class<E> entityClass, String name, Properties properties){
+		return createEntity(entityClass, name, properties);
 	}
 
 	public  <E> Fixture<E> getFixture(Class<E> entityClass, String name) {
@@ -45,37 +54,48 @@ public class CarpenterCore {
 	}
 
 	public <E> Fixture<E> getFixture(Class<E> entityClass) {
-		String name = entityClass.getName();
-		Fixture<E> fixture = (Fixture<E>) fixtureTable.get(entityClass, name);
-		if(fixture == null){
-			throw new FixtureNotFound(entityClass, name);
-		}
-		return fixture;
+		return getFixture(entityClass, entityClass.getName());
 	}
 
-	public <E> E build(Class<E> entityClass, String name, Properties properties){
-		E entity = build(entityClass, name);
-		overrides(entity, properties);
+	private <E> E buildEntity(Class<E> entityClass, String name, Properties properties){
+		constructionContext.startBuild();
+		E entity;
+		try {
+			Fixture<E> fixture = getFixture(entityClass, name);
+			verifyBuildRequest(fixture, properties);
+			entity = fixture.newInstance();
+			fixture.configure(entity);
+			overrides(entity, properties);
+		} finally {
+			constructionContext.endBuild();
+		}
+
 		return entity;
 	}
 
-	public <E> E create(Class<E> entityClass, String name){
-		constructionContext.startCreate();
-		E entity = build(entityClass, name);
-		if(persister.isPresent()){
-			persister.get().persist(entity);
+	private <E> void verifyBuildRequest(Fixture<E> fixture, Properties properties) {
+		String[] required = new String[]{};
+		if(fixture instanceof PartialFixture){
+			required = ((PartialFixture) fixture).requiredProperties();
 		}
-		constructionContext.endCreate();
-		return entity;
+
+		boolean isValid = properties.getOverrides().keySet().containsAll(Arrays.asList(required));
+		if(!isValid){
+			throw new RuntimeException("not all required properties were supplide for partial fixture");
+		}
 	}
 
-	public <E> E create(Class<E> entityClass, String name, Properties properties){
+	private <E> E createEntity(Class<E> entityClass, String name, Properties properties) {
 		constructionContext.startCreate();
-		E entity = build(entityClass, name, properties);
-		if(persister.isPresent()){
-			persister.get().persist(entity);
+		E entity;
+		try {
+			entity = buildEntity(entityClass, name, properties);
+			if(persister.isPresent()){
+				persister.get().persist(entity);
+			}
+		} finally {
+			constructionContext.endCreate();
 		}
-		constructionContext.endCreate();
 		return entity;
 	}
 

@@ -1,4 +1,4 @@
-package com.kodova.carpenter.entity;
+package com.kodova.carpenter.example.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

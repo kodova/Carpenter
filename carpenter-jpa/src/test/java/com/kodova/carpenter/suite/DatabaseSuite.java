@@ -1,5 +1,7 @@
 package com.kodova.carpenter.suite;
 
+import com.kodova.carpenter.Carpenter;
+import com.kodova.carpenter.JpaPersister;
 import com.kodova.carpenter.JpaPersisterTest;
 import org.junit.ClassRule;
 import org.junit.rules.ExternalResource;
@@ -22,6 +24,9 @@ public class DatabaseSuite {
 		@Override
 		protected void before() throws Throwable {
 			em = Persistence.createEntityManagerFactory("CarpenterUnit").createEntityManager();
+
+			Carpenter.fixturePackage("com.kodova.carpenter.fixture");
+			Carpenter.persister(new JpaPersister(em));
 		}
 
 		@Override

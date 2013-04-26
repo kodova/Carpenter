@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.kodova.carpenter</groupId>
 		<artifactId>carpenter</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>0.8.0</version>
 		<relativePath>../</relativePath>
 	</parent>
 
